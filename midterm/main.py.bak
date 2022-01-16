@@ -1,0 +1,62 @@
+import tensorflow as tf
+import yolo_inference
+from yolo_inference import get_bbox
+
+EMOTIONS = ['angry', 'disgusted', 'fearful', 'happy', 'sad', 'surprised', 'neutral']
+
+def main():
+    emoji_faces = []
+    for index, emotion in enumerate(EMOTIONS):
+        emoji_faces.append(cv2.imread('./data/emojis/' + emotion + '.png', -1))
+    
+    #Captures = cv2.VideoCapture(0)
+    
+    while True:
+        #ret, frame = video_captor.read()
+        #image_context = cv2.cvtColor(cv2.imread(frame), cv2.COLOR_BGR2RGB)
+        
+        with open(faces_list.txt, 'r') as f:
+            lines = f.readlines()
+
+        for idx, line in enumerate(lines):
+            image_context_path = line.split('\n')[0].split(' ')[0]
+            image_context = cv2.cvtColor(cv2.imread(image_context_path), cv2.COLOR_BGR2RGB)
+        
+        bboxes = yolo_inference.get_bbox(image_context)
+        
+        print(bboxes)
+        exit(0)
+
+        if showBox:
+          if len(bboxes) > 0:
+            for i in range(len(bboxes)):
+                [x1,y1,x2,y2] = bboxes[i]
+                cv2.rectangle(frame, (x1,y1), (x2,y2), (255,0,0), 2)
+
+        if cv2.waitKey(1) & 0xFF == ord('c'):
+          print("capturing an image~")
+          
+          if detected_face is not None:
+            print("Not None")
+            # cv2.imwrite('a.jpg', detected_face)
+            tensor = image_to_tensor(detected_face)
+            result = sess.run(probs, feed_dict={face_x: tensor})
+            print(result)
+        if result is not None:
+          for index, emotion in enumerate(EMOTIONS):
+            cv2.putText(frame, emotion, (10, index * 20 + 20), cv2.FONT_HERSHEY_PLAIN, 0.5, (0, 255, 0), 1)
+            cv2.rectangle(frame, (130, index * 20 + 10), (130 + int(result[0][index] * 100), (index + 1) * 20 + 4),
+                          (255, 0, 0), -1)
+            emoji_face = feelings_faces[np.argmax(result[0])]
+
+          for c in range(0, 3):
+            frame[200:320, 10:130, c] = emoji_face[:, :, c] * (emoji_face[:, :, 3] / 255.0) + frame[200:320, 10:130, c] * (1.0 - emoji_face[:, :, 3] / 255.0)
+        cv2.imshow('face', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+          print("Ready to Quit")
+          video_captor.release()
+          cv2.destroyAllWindows()
+          break
+
+if __name__ == '__main__':
+  main()

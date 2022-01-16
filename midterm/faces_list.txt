@@ -1,0 +1,2 @@
+./data/faces/sun_coxyilpyvhjjffeu.jpg
+./data/faces/sun_cctsbovvkqbwpxgn.jpg
